@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import logo from '../images/logo.png'; // Assurez-vous que le chemin de l'image est correct
+import logo from '../images/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -9,35 +9,65 @@ function Login() {
     password: '',
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate(); // Correctement importé depuis react-router-dom
+  const navigate = useNavigate();
 
-  // Fonction pour gérer les changements dans les champs du formulaire
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    
+    // Clear field-specific error when user types
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: undefined
+      }));
+    }
   };
 
-  // Fonction pour soumettre le formulaire
+  // Validate form inputs
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'L\'email est requis';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Format d\'email invalide';
+    }
+    
+    if (!formData.password.trim()) {
+      newErrors.password = 'Le mot de passe est requis';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setErrors({});
 
     const cleanedData = {
       email: formData.email.trim(),
       password: formData.password.trim(),
     };
 
-    setErrorMessage('');
-    setLoading(true);
-
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/auth/login',
+        'http://localhost:8080/auth/login',
         cleanedData,
         {
           headers: {
@@ -50,21 +80,46 @@ function Login() {
       console.log('Réponse du serveur:', response.data);
 
       if (response.data.message === 'Login successful') {
-        navigate('/dashboard'); // Redirige vers la page Dashboard
+        // Save user data in localStorage or state management (Redux, Context API, etc.)
+        localStorage.setItem('user', JSON.stringify({
+          uid: response.data.uid,
+          email: response.data.email,
+          displayName: response.data.displayName,
+          role: response.data.role
+        }));
+        
+        // Redirect to dashboard
+        navigate('/dashboard');
       } else {
-        setErrorMessage('Erreur: Réponse inattendue du serveur.');
+        setErrors({
+          general: 'Erreur: Réponse inattendue du serveur.'
+        });
       }
     } catch (error) {
-      setLoading(false);
-
+      console.error('Erreur lors de l\'appel API:', error);
+      
       if (error.response) {
-        console.error('Erreur lors de l\'appel API:', error.response.data);
-        setErrorMessage('Erreur lors de la connexion: ' + error.response.data.message);
+        // Handle specific error responses
+        if (error.response.status === 401) {
+          setErrors({
+            general: 'Email ou mot de passe incorrect'
+          });
+        } else if (error.response.data && error.response.data.message) {
+          setErrors({
+            general: error.response.data.message
+          });
+        } else {
+          setErrors({
+            general: 'Une erreur s\'est produite lors de la connexion'
+          });
+        }
       } else {
-        setErrorMessage('Une erreur s\'est produite. Veuillez réessayer plus tard.');
+        setErrors({
+          general: 'Problème de connexion au serveur'
+        });
       }
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -77,9 +132,9 @@ function Login() {
 
         <h1 className="text-2xl font-bold text-center mb-4">Connexion</h1>
 
-        {errorMessage && (
-          <div className="mb-4 text-red-600 text-center">
-            <p>{errorMessage}</p>
+        {errors.general && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            <p>{errors.general}</p>
           </div>
         )}
 
@@ -95,9 +150,13 @@ function Login() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Entrez votre email"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.email ? 'border-red-500' : ''
+              }`}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -111,17 +170,23 @@ function Login() {
               value={formData.password}
               onChange={handleChange}
               placeholder="Entrez votre mot de passe"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.password ? 'border-red-500' : ''
+              }`}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+            )}
           </div>
 
           <button
             type="submit"
-            className={`w-full ${loading ? 'bg-gray-500' : 'bg-custom-red'} text-white py-2 rounded-lg hover:bg-custom-gray transition duration-200`}
-            disabled={loading}
+            disabled={isSubmitting}
+            className={`w-full ${
+              isSubmitting ? 'bg-gray-400' : 'bg-custom-red hover:bg-custom-gray'
+            } text-white py-2 rounded-lg transition duration-200`}
           >
-            {loading ? 'Chargement...' : 'Se connecter'}
+            {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
           </button>
         </form>
 

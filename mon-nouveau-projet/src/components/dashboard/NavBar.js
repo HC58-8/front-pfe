@@ -21,7 +21,7 @@ function NavBar() {
     <div className="fixed top-0 left-0 w-full bg-white p-0 m-0 shadow-md z-50">
       <div className="flex items-center justify-between p-0">
         <img src={logo} alt="Logo" className="m-2 w-16 h-[51px]" />
-
+        <div className="menu-toggle"> </div>
         {/* Zone de recherche */}
         <form onSubmit={handleSearchSubmit} className="flex items-center w-1/3">
           <input

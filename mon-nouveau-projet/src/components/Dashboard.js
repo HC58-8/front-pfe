@@ -1,26 +1,42 @@
-// src/dashboard/Dashboard.js
 import React, { useState } from "react";
-import SideBar from './dashboard/SideBar';  // La barre latérale
-import NavBar from './dashboard/NavBar';    // La barre de navigation
-import AddProductForm from './dashboard/AddProductForm'; // Formulaire pour ajouter un produit
+import SideBar from './dashboard/SideBar';
+import NavBar from './dashboard/NavBar';
+import AddProductForm from './dashboard/AddProductForm';
+import GestionDeFournisseur from "./dashboard/GestionDeFournisseur";
+import GestionAgent from "./dashboard/GestionAgent";
 
 function Dashboard() {
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
-
-  const handleShowAddProductForm = (show) => {
-    setShowAddProductForm(show);
+  const [activeComponent, setActiveComponent] = useState('dashboard');
+  
+  const handleMenuItemClick = (componentName) => {
+    setActiveComponent(componentName);
+  };
+  
+  // Render the appropriate component based on the active selection
+  const renderComponent = () => {
+    switch(activeComponent) {
+      case 'addProduct':
+        return <AddProductForm />;
+      case 'GestionDeFournisseur':
+        return <GestionDeFournisseur />;
+      case 'GestionAgent':
+        return <GestionAgent />;
+      case 'dashboard':
+      default:
+        return <h2>Bienvenue dans le Dashboard</h2>;
+    }
   };
 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <SideBar onShowAddProductForm={handleShowAddProductForm} />
-
+      <SideBar onMenuItemClick={handleMenuItemClick} />
+      
       {/* Contenu principal */}
-      <div className="flex-1 bg-red-100">
+      <div className="flex-1 bg-white">
         <NavBar />
-        <div className="mt-4 p-4">
-          {showAddProductForm ? <AddProductForm /> : <h2>Bienvenue dans le Dashboard</h2>}
+        <div className=" mx-[20px] ">
+          {renderComponent()}
         </div>
       </div>
     </div>

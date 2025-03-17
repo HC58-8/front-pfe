@@ -5,7 +5,8 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import ChatBot from './components/ChatBot';
 import './tailwind.css'; // Import du fichier Tailwind
-import AddProductForm from './components/dashboard/AddProductForm';
+import AjoutProd from './components/dashboard/AddProductForm';
+import ProduitList  from './components/dashboard/ProductList';
 
 function App() {
   return (
@@ -19,7 +20,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/produits/ajouterunproduit" element={<AddProductForm />} />
+          <Route path="/produits/ajouterunproduit" element={<AjoutProd />} />
+          <Route path="/produits/listedesproduits" element={<ProduitList  />} />
+
+
         </Routes>
       </div>
     </Router>

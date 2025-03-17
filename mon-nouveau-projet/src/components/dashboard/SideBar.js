@@ -8,7 +8,7 @@ const menuItems = [
     label: "Produits",
     crudLinks: [
       { path: "/produits/ajouterunproduit", label: "AJOUTER UN PRODUIT", component: "addProduct" },
-      { path: "/produits/listedesproduits", label: "LISTE DES PRODUITS", component: "productList" },
+      { path: "/produits/listedesproduits", label: "LISTE DES PRODUITS", component: "ProductList" },
       { path: "/produits/update", label: "METTRE À JOUR", component: "updateProduct" },
       { path: "/produits/delete", label: "SUPPRIMER", component: "deleteProduct" }
     ],

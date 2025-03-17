@@ -1,0 +1,64 @@
+/* BrandList.css */
+.brand-list-container {
+    padding: 20px;
+  }
+  
+  .add-brand-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  
+  .add-brand-button:hover {
+    background-color: #45a049; /* Darker green */
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table, th, td {
+    border: 1px solid black;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .ellipsis {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  
+  .options {
+    display: flex;
+    gap: 5px;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 5px;
+    z-index: 1;
+  }
+  
+  .options button {
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #f2f2f2;
+  }
+  
+  .options button:hover {
+    background-color: #ddd;
+  }

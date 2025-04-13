@@ -1,0 +1,231 @@
+/* Navbar Container */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    height: 60px;
+  }
+  
+  .navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 100%;
+  }
+  
+  /* Logo */
+  .navbar-logo {
+    width: 60px;
+    height: 50px;
+    margin-right: 20px;
+  }
+  
+  /* Search Bar */
+  .navbar-search {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 400px;
+  }
+  
+  .navbar-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    font-size: 14px;
+  }
+  
+  .navbar-search-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .navbar-search-button:hover {
+    background-color: #e60000;
+  }
+  
+  /* Icons */
+  .navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .navbar-icon {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  
+  .navbar-icon:hover {
+    color: #e60000;
+  }
+  
+  /* Notification Bell */
+  .notification-bell {
+    position: relative;
+  }
+  
+  .notification-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  
+  /* Notification Dropdown */
+  .notification-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 10px;
+  }
+  
+  .notification-item {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .notification-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+  
+  .notification-message {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+  }
+  
+  .notification-timestamp {
+    font-size: 12px;
+    color: #666;
+  }
+  
+  .notification-empty {
+    padding: 12px 16px;
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* Profile Menu */
+  .navbar-profile {
+    position: relative;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .profile-initial {
+    color: white;
+    font-size: 18px;
+  }
+  
+  .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    width: 200px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 10px;
+  }
+  
+  .profile-dropdown-item {
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .profile-dropdown-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .profile-dropdown-icon {
+    margin-right: 8px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .navbar-search {
+      max-width: 300px;
+    }
+  
+    .notification-dropdown {
+      width: 250px;
+    }
+  
+    .notification-message {
+      font-size: 13px;
+    }
+  
+    .notification-timestamp {
+      font-size: 11px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar-search {
+      max-width: 200px;
+    }
+  
+    .notification-dropdown {
+      width: 200px;
+    }
+  
+    .notification-message {
+      font-size: 12px;
+    }
+  
+    .notification-timestamp {
+      font-size: 10px;
+    }
+  }

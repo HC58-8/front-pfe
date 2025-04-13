@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth,firestore } from '../firebaseConfig';
 import logo from '../images/logo.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,7 +24,6 @@ function Signup() {
     const { name, value } = e.target;
     
     if (name === 'phone') {
-      // Ensure phone always has the +216 prefix
       if (!value.startsWith('+216 ')) {
         setFormData((prevData) => ({
           ...prevData,
@@ -38,6 +39,13 @@ function Signup() {
       setFormData((prevData) => ({
         ...prevData,
         [name]: value,
+      }));
+    }
+
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
       }));
     }
   };
@@ -81,53 +89,62 @@ function Signup() {
     }
     
     setIsSubmitting(true);
-
-    const cleanedData = {
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      phone: formData.phone.trim(),
-      email: formData.email.trim(),
-      password: formData.password.trim(),
-      role: formData.role,
-    };
+    setErrors({});
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/auth/signup', 
-        cleanedData, 
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-          },
-        }
+      // Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth, 
+        formData.email, 
+        formData.password
       );
-      
-      console.log('Réponse du serveur:', response.data);
-      
-      if (response.data.message === "User registered successfully") {
-        alert('Inscription réussie! Vous pouvez maintenant vous connecter.');
-        navigate('/login');
-      } else {
-        setErrors({ general: 'Une erreur s\'est produite lors de l\'inscription.' });
-      }
+      const user = userCredential.user;
+
+      // Firestore Document Creation
+      const userData = {
+        uid: user.uid,
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        role: formData.role,
+        createdAt: new Date().toISOString()
+      };
+
+      await setDoc(doc(firestore, 'users', user.uid), userData);
+
+      alert('Inscription réussie! Vous pouvez maintenant vous connecter.');
+      navigate('/login');
     } catch (error) {
-      console.error('Erreur lors de l\'appel API:', error);
+      console.error('Erreur lors de l\'inscription:', error);
       
-      if (error.response) {
-        setErrors({
-          general: `Erreur lors de l'inscription: ${error.response.data.error || 'Problème de connexion au serveur'}`
-        });
-      } else {
-        setErrors({
-          general: 'Problème de connexion au serveur'
-        });
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          setErrors({ 
+            general: 'Un compte existe déjà avec cet email.' 
+          });
+          break;
+        case 'auth/weak-password':
+          setErrors({ 
+            password: 'Le mot de passe est trop faible.' 
+          });
+          break;
+        case 'auth/invalid-email':
+          setErrors({ 
+            email: 'Format d\'email invalide.' 
+          });
+          break;
+        default:
+          setErrors({ 
+            general: 'Une erreur s\'est produite lors de l\'inscription.' 
+          });
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  // The UI remains exactly the same as your original implementation
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100 overflow-hidden">
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg flex h-screen md:h-auto md:max-h-screen md:my-4 overflow-hidden">
@@ -255,7 +272,7 @@ function Signup() {
                 onChange={handleChange}
                 placeholder="Entrez votre mot de passe"
                 className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                  errors.password ? 'border-red-500' : ''
+                    errors.password ? 'border-red-500' : ''
                 }`}
               />
               {errors.password && (

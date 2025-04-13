@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './AjoutProd.css';
-
+import { getDatabase, ref, set } from 'firebase/database';
+import { db } from '../../firebaseConfig';
 const AjoutProd = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -19,7 +20,7 @@ const AjoutProd = () => {
     saleUnit: '',
     purchaseUnit: '',
     stockAlert: 0,
-    stock: 0, // Added stock field
+    stock: 0,
     forSale: false,
   });
 
@@ -48,34 +49,32 @@ const AjoutProd = () => {
 
     const formDataToSend = new FormData();
 
-    // Append all fields to FormData
     Object.keys(formData).forEach((key) => {
       if (key === 'productImage' && formData[key]) {
-        formDataToSend.append(key, formData[key]); // Append file
+        formDataToSend.append(key, formData[key]);
       } else if (
         key === 'orderTax' ||
         key === 'productCost' ||
         key === 'productPrice' ||
         key === 'stockAlert' ||
-        key === 'stock' // Numeric fields
+        key === 'stock'
       ) {
-        formDataToSend.append(key, parseFloat(formData[key])); // Convert to number
+        formDataToSend.append(key, parseFloat(formData[key]));
       } else {
-        formDataToSend.append(key, formData[key]); // Append as-is
+        formDataToSend.append(key, formData[key]);
       }
     });
 
     try {
       const response = await fetch('http://localhost:8081/products', {
         method: 'POST',
-        body: formDataToSend, // Let the browser set the Content-Type header
+        body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage({ type: 'success', text: `Product added successfully! ID: ${data.id}` });
-        // Reset form
         setFormData({
           name: '',
           productImage: null,
@@ -93,10 +92,9 @@ const AjoutProd = () => {
           saleUnit: '',
           purchaseUnit: '',
           stockAlert: 0,
-          stock: 0, // Reset stock field
+          stock: 0,
           forSale: false,
         });
-        // Reset file input
         const fileInput = document.querySelector('input[type="file"]');
         if (fileInput) fileInput.value = '';
       } else {
@@ -108,6 +106,15 @@ const AjoutProd = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleScanBarcode = () => {
+    const scanRequestRef = ref(db, 'scanRequests/'); // Adjust path as needed
+    set(scanRequestRef, { request: true }); // Send request to mobile app
+  };
+
+  const handleBarcodeReceived = (barcode) => {
+    setFormData({ ...formData, codeProduct: barcode });
   };
 
   return (
@@ -133,7 +140,10 @@ const AjoutProd = () => {
         </select>
 
         <label>Code Product *</label>
-        <input type="text" name="codeProduct" value={formData.codeProduct} onChange={handleChange} required placeholder="Scan your barcode" className="input-field" />
+        <div style={{display: 'flex', alignItems:'center'}}>
+          <input type="text" name="codeProduct" value={formData.codeProduct} onChange={handleChange} required placeholder="Scan your barcode" className="input-field" />
+          <button type="button" onClick={handleScanBarcode}>Scan Barcode</button>
+        </div>
 
         <label>Category *</label>
         <select name="category" value={formData.category} onChange={handleChange} required className="input-field">

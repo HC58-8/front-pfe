@@ -1,0 +1,265 @@
+/* General Styles */
+.fournisseur-list-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .add-fournisseur-button,
+  .export-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .add-fournisseur-button {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .add-fournisseur-button:hover {
+    background-color: #218838;
+  }
+  
+  .export-button.excel {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .export-button.excel:hover {
+    background-color: #0056b3;
+  }
+  
+  .export-button.pdf {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .export-button.pdf:hover {
+    background-color: #c82333;
+  }
+  
+  /* Search and Filter Section */
+  .search-filter-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .filter-button {
+    padding: 10px 20px;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-button:hover {
+    background-color: #e0a800;
+  }
+  
+  /* Filter Popup */
+  .filter-popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .filter-popup h3 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  .filter-options {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .filter-options h4 {
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  .filter-options label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .filter-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .filter-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .filter-buttons button:first-child {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .filter-buttons button:first-child:hover {
+    background-color: #0056b3;
+  }
+  
+  .filter-buttons button:last-child {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .filter-buttons button:last-child:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Import Section */
+  .import-section {
+    margin-bottom: 20px;
+  }
+  
+  .import-section input[type="file"] {
+    margin-right: 10px;
+  }
+  
+  .import-section button {
+    padding: 10px 20px;
+    background-color: #17a2b8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  .import-section button:hover {
+    background-color: #138496;
+  }
+  
+  /* Message Styling */
+  .message {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  /* Table Styling */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  table th,
+  table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  table th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Ellipsis and Options */
+  .ellipsis {
+    cursor: pointer;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .options {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .options button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .options button:first-child {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .options button:first-child:hover {
+    background-color: #c82333;
+  }
+  
+  .options button:last-child {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .options button:last-child:hover {
+    background-color: #0056b3;
+  }

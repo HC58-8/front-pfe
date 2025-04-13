@@ -414,9 +414,7 @@ const ProduitList = () => {
         <button className="export-button excel" onClick={exportToExcel}>
           Export XL
         </button>
-        <button className="export-button pdf" onClick={exportToPDF}>
-          Export PDF
-        </button>
+      
       </div>
       <div className="search-filter-section">
         <input
